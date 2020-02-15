@@ -1,28 +1,79 @@
-import {addHook} from 'pirates';
+import {generate} from '@fink/loxia';
+
+
+const mock_hooks = [];
+const mock_maps = [];
 
 
 jest.mock('pirates', ()=> ({
-  addHook: jest.fn()
+  addHook: jest.fn((...args)=> mock_hooks.push(args))
+}));
+
+jest.mock('source-map-support', ()=> ({
+  install: jest.fn((...args)=> mock_maps.push(args))
+}));
+
+
+jest.mock('@fink/loxia', ()=> ({
+  generate: jest.fn()
 }));
 
 
 describe('hook', ()=> {
-  it('registers upon import', ()=> {
-    const {transform} = require('.');
+  require('.');
 
-    expect(addHook).toHaveBeenCalledWith(
-      transform, {exts: ['.fnk'], ignoreNodeModules: false}
-    );
+  it('registers hook', ()=> {
+
+    expect(
+      mock_hooks
+    ).toEqual([
+      [expect.anything(Function), {exts: ['.fnk'], ignoreNodeModules: false}]
+    ]);
   });
 
 
   it('transforms fnk', ()=> {
-    const {transform} = require('.');
+    generate.mockReturnValue({code: 'test-code', map: 'test-map'});
+
+    const [[hook]] = mock_hooks;
 
     expect(
-      transform('foobar = 3', 'foobar.fnk')
+      hook('test = `testing`\n', 'test.fnk')
     ).toBe(
-      'const foobar = 3;'
+      'test-code'
+    );
+  });
+
+
+  it('registers source map support', ()=> {
+    expect(
+      mock_maps
+    ).toEqual([[{
+      handleUncaughtExceptions: false,
+      environment: 'node',
+      retrieveSourceMap: expect.anything(Function)
+    }]]);
+  });
+
+
+  it('gets source-map', ()=> {
+    const [[{retrieveSourceMap}]] = mock_maps;
+
+    expect(
+      retrieveSourceMap('test.fnk')
+    ).toEqual(
+      {map: 'test-map', url: null}
+    );
+  });
+
+
+  it('returns null for missing source-map', ()=> {
+    const [[{retrieveSourceMap}]] = mock_maps;
+
+    expect(
+      retrieveSourceMap('test-foo.fnk')
+    ).toBe(
+      null
     );
   });
 });

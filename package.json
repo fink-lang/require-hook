@@ -50,6 +50,7 @@
   "dependencies": {
     "@fink/larix": "^1.0.0",
     "@fink/loxia": "^1.0.0",
-    "pirates": "^4.0.1"
+    "pirates": "^4.0.1",
+    "source-map-support": "^0.5.16"
   }
 }
