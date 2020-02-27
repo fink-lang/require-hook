@@ -1,0 +1,47 @@
+{addHook} = import `pirates`
+source_map_support = import `source-map-support`
+
+{parse} = import `@fink/larix`
+{generate} = import `@fink/loxia`
+
+
+transformer = fn store_map: fn source, filename:
+  fink_ast = parse(source)
+  # {sourceRoot: path.dirname(filename)}
+  {code, map: source_map} = generate(fink_ast, filename, source)
+  store_map(filename, source_map)
+  code
+
+
+install_source_map_support = fn get_map:
+  source_map_support.install({
+    handleUncaughtExceptions: false,
+    environment: `node`,
+    retrieveSourceMap: get_map
+  })
+
+
+maps_retriever = fn source_maps: fn filename:
+  source_map = source_maps.(filename) || null
+
+  match null:
+    source_map: null
+    else: {url: null, map: source_map}
+
+
+maps_updater = fn source_maps: fn filename, source_map:
+  Object.assign(source_maps, {`${filename}`: source_map})
+
+
+main = fn:
+  source_maps = {}
+
+  install_source_map_support(maps_retriever(source_maps))
+  hook = transformer(maps_updater(source_maps))
+
+  addHook(hook, {
+    exts: [`.fnk`],
+    ignoreNodeModules: false
+  })
+
+main()
