@@ -17,12 +17,11 @@
   "scripts": {
     "default": "run clean test build",
     "clean": "rimraf ./build",
-    "lib": "fnk --src ./lib --out-dir ./build/lib --ignore '**/*.test.fnk'",
     "build": "run build:*",
     "build:dir": "mkdir -p ./build/pkg/",
     "build:fnk": "fnk --src ./src --out-dir ./build/pkg --ignore '**/*.test.fnk'",
     "build:files": "cp ./package.json ./README.md ./LICENSE ./build/pkg/",
-    "test": "run lib jest",
+    "test": "run jest",
     "jest": "jest --verbose --runInBand --no-cache ",
     "cd": "run clean test build release",
     "release": "semantic-release"
@@ -33,8 +32,8 @@
     }
   },
   "devDependencies": {
-    "@babel/core": "^7.8.0",
     "@fink/cli": "^1.3.0",
+    "@fink/jest": "^1.0.0",
     "@fink/larix": "^3.0.0",
     "@fink/loxia": "^3.0.0",
     "commitizen": "^4.0.3",
