@@ -32,10 +32,10 @@
     }
   },
   "devDependencies": {
-    "@fink/cli": "^1.3.0",
+    "@fink/cli": "^2.0.0",
     "@fink/jest": "^1.0.0",
-    "@fink/larix": "^3.0.0",
-    "@fink/loxia": "^3.0.0",
+    "@fink/larix": "^4.0.0",
+    "@fink/loxia": "^4.0.0",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "^3.1.0",
     "jest-cli": "^25.1.0",
@@ -43,8 +43,8 @@
     "semantic-release": "^17.0.4"
   },
   "peerDependencies": {
-    "@fink/larix": "^3.0.0",
-    "@fink/loxia": "^3.0.0"
+    "@fink/larix": "^4.0.0",
+    "@fink/loxia": "^4.0.0"
   },
   "dependencies": {
     "pirates": "^4.0.1",
