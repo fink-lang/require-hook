@@ -6,7 +6,7 @@ source_map_support = import `source-map-support`
 
 
 transformer = fn store_map: fn source, filename:
-  fink_ast = parse(source)
+  fink_ast = parse(source, filename)
   # {sourceRoot: path.dirname(filename)}
   {code, map: source_map} = generate(fink_ast, filename, source)
   store_map(filename, source_map)
