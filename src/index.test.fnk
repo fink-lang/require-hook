@@ -1,18 +1,19 @@
-{describe, it, mock, mock_fn, snapshot, eq, match_any} = import `./testing`
+{describe, it, mock, mock_fn, expect} = import `@fink/jest`
+{to_equal, not, any} = import `@fink/jest`
 
 mock_hooks = []
 mock_maps = []
 
 
-mock:: `pirates`, fn: {
-  addHook: mock_fn:: fn ...args: mock_hooks.push(args)
+jest.mock:: `pirates`, fn: {
+  addHook: mock_fn:: fn ...args: mock_hooks.push:: args
 }
 
-mock:: `source-map-support`, fn: {
-  install: mock_fn:: fn ...args: mock_maps.push(args)
+jest.mock:: `source-map-support`, fn: {
+  install: mock_fn:: fn ...args: mock_maps.push:: args
 }
 
-mock:: `@fink/loxia`, fn: {
+jest.mock:: `@fink/loxia`, fn: {
   generate: mock_fn()
 }
 
@@ -20,38 +21,48 @@ mock:: `@fink/loxia`, fn: {
 
 
 describe:: `hook`, fn:
-  require(`.`)
+  require:: `.`
 
   it:: `registers hook`, fn:
-    mock_hooks eq [
-      [match_any(Function), {exts: [`.fnk`], ignoreNodeModules: false}]
-    ]
+    expect::
+      mock_hooks
+      to_equal::
+        [[any(Function), {exts: [`.fnk`], ignoreNodeModules: false}]]
 
 
   it:: `transforms fnk`, fn:
-    generate.mockReturnValue({code: `test-code`, map: `test-map`})
+    generate.mockReturnValue:: {code: `test-code`, map: `test-map`}
 
     [[hook]] = mock_hooks
 
-    hook(`test = 1234`, `test.fnk`) eq `test-code`
+    expect::
+        hook:: `test = 1234`, `test.fnk`
+        to_equal:: `test-code`
 
 
   it:: `registers source map support`, fn:
-    mock_maps eq [[{
-      handleUncaughtExceptions: false,
-      environment: `node`,
-      retrieveSourceMap: match_any(Function)
-    }]]
+    expect::
+      mock_maps
+      to_equal::
+        [[{
+          handleUncaughtExceptions: false,
+          environment: `node`,
+          retrieveSourceMap: any:: Function
+        }]]
 
 
   it:: `gets source-map`, fn:
     [[{retrieveSourceMap}]] = mock_maps
 
-    retrieveSourceMap(`test.fnk`) eq {map: `test-map`, url: null}
+    expect::
+      retrieveSourceMap:: `test.fnk`
+      to_equal:: {map: `test-map`, url: null}
 
 
   it:: `returns null for missing source-map`, fn:
     [[{retrieveSourceMap}]] = mock_maps
 
-    retrieveSourceMap(`test-foo.fnk`) eq null
+    expect::
+      retrieveSourceMap:: `test-foo.fnk`
+      to_equal:: null
 

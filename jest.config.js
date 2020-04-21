@@ -2,7 +2,7 @@ module.exports = {
   testEnvironment: 'node',
   setupFiles: [],
   moduleFileExtensions: ['js', 'fnk'],
-  transform: {'^.+\\.fnk$': ['@fink/jest']},
+  transform: {'^.+\\.fnk$': ['@fink/jest/transform']},
   transformIgnorePatterns: ['.+/node_modules/', '<rootDir>/build/'],
 
   modulePathIgnorePatterns: ['<rootDir>/build/'],
