@@ -1,16 +1,26 @@
 {addHook} = import `pirates`
 source_map_support = import `source-map-support`
+convert_source_map = import `convert-source-map`
 
 {parse} = import `@fink/larix`
 {generate} = import `@fink/loxia`
+
+
+add_source_map_inline = fn {code, map: source_map}:
+  converter = convert_source_map.fromObject:: source_map
+  comment = converter.toComment()
+  '${code}\n${comment}'
+
 
 
 transformer = fn store_map: fn source, filename:
   fink_ast = parse:: source, filename
   # {sourceRoot: path.dirname(filename)}
   {code, map: source_map} = generate:: fink_ast, filename, source
+
   store_map:: filename, source_map
-  code
+
+  add_source_map_inline:: {code, map: source_map}
 
 
 install_source_map_support = fn get_map:
@@ -41,5 +51,6 @@ main = fn:
   hook = transformer:: maps_updater:: source_maps
 
   addHook:: hook, {exts: [`.fnk`], ignoreNodeModules: false}
+
 
 main()
