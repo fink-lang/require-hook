@@ -35,7 +35,7 @@
     "@fink/cli": "^3.0.0",
     "@fink/jest": "^2.0.0",
     "@fink/larix": "^6.0.0",
-    "@fink/loxia": "^4.11.0",
+    "@fink/loxia": "^5.0.0",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "^3.1.0",
     "jest-cli": "^25.1.0",
@@ -44,9 +44,10 @@
   },
   "peerDependencies": {
     "@fink/larix": "^6.0.0",
-    "@fink/loxia": "^4.11.0"
+    "@fink/loxia": "^5.0.0"
   },
   "dependencies": {
+    "convert-source-map": "^1.7.0",
     "pirates": "^4.0.1",
     "source-map-support": "^0.5.16"
   }

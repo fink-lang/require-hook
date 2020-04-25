@@ -37,7 +37,9 @@ describe:: `hook`, fn:
 
     expect::
         hook:: `test = 1234`, `test.fnk`
-        to_equal:: `test-code`
+        to_equal:: `
+          test-code
+          //# sourceMappingURL=data:application/json;charset=utf-8;base64,InRlc3QtbWFwIg==`
 
 
   it:: `registers source map support`, fn:
