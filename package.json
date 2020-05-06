@@ -32,19 +32,19 @@
     }
   },
   "devDependencies": {
-    "@fink/cli": "^3.0.0",
-    "@fink/jest": "^2.0.0",
-    "@fink/larix": "^6.0.0",
-    "@fink/loxia": "^5.0.0",
+    "@fink/cli": "^4.0.0",
+    "@fink/jest": "^4.0.0",
+    "@fink/larix": "^8.0.0",
+    "@fink/loxia": "^7.0.0",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "^3.1.0",
-    "jest-cli": "^25.1.0",
+    "jest-cli": "^26.0.0",
     "npx-run": "^2.1.2",
     "semantic-release": "^17.0.4"
   },
   "peerDependencies": {
-    "@fink/larix": "^6.0.0",
-    "@fink/loxia": "^5.0.0"
+    "@fink/larix": ">=8.0.0",
+    "@fink/loxia": ">=7.0.0"
   },
   "dependencies": {
     "convert-source-map": "^1.7.0",

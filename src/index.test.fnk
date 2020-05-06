@@ -1,70 +1,83 @@
 {describe, it, mock, mock_fn, expect} = import `@fink/jest`
-{to_equal, not, any} = import `@fink/jest`
+{to_equal, to_throw, not, any} = import `@fink/jest`
 
 mock_hooks = []
 mock_maps = []
 
 
-jest.mock:: `pirates`, fn: {
-  addHook: mock_fn:: fn ...args: mock_hooks.push:: args
-}
+jest.mock `pirates`, fn: dict:
+  addHook: mock_fn fn ...args: mock_hooks.push args
 
-jest.mock:: `source-map-support`, fn: {
-  install: mock_fn:: fn ...args: mock_maps.push:: args
-}
+jest.mock `source-map-support`, fn: dict:
+  install: mock_fn fn ...args: mock_maps.push args
 
-jest.mock:: `@fink/loxia`, fn: {
+jest.mock `@fink/loxia`, fn: dict:
   generate: mock_fn()
-}
 
 {generate} = import `@fink/loxia`
 
 
-describe:: `hook`, fn:
-  require:: `.`
+describe `hook`, fn:
+  require `.`
 
-  it:: `registers hook`, fn:
-    expect::
+  it `registers hook`, fn:
+    expect
       mock_hooks
-      to_equal::
+      to_equal
         [[any(Function), {exts: [`.fnk`], ignoreNodeModules: false}]]
 
 
-  it:: `transforms fnk`, fn:
-    generate.mockReturnValue:: {code: `test-code`, map: `test-map`}
+  it `transforms fnk`, fn:
+    generate.mockReturnValue {code: `test-code`, map: `test-map`}
 
     [[hook]] = mock_hooks
 
-    expect::
-        hook:: `test = 1234`, `test.fnk`
-        to_equal:: `
+    expect
+        hook `test = 1234`, `test.fnk`
+        to_equal `
           test-code
           //# sourceMappingURL=data:application/json;charset=utf-8;base64,InRlc3QtbWFwIg==`
 
 
-  it:: `registers source map support`, fn:
-    expect::
+  it `throws parse errors`, fn:
+    generate.mockReturnValue {code: `test-code`, map: `test-map`}
+
+    [[hook]] = mock_hooks
+
+    expect
+      fn: hook `foo [`, `test.fnk`
+      to_throw `test.fnk:1:5
+        1| foo [
+                ^
+
+        Expected ',' or indented new line or ']'.`
+
+
+  it `registers source map support`, fn:
+    expect
       mock_maps
-      to_equal::
-        [[{
-          handleUncaughtExceptions: false,
-          environment: `node`,
-          retrieveSourceMap: any:: Function
-        }]]
+      to_equal
+        list: list: dict:
+          handleUncaughtExceptions: false
+          environment: `node`
+          retrieveSourceMap: any Function
 
 
-  it:: `gets source-map`, fn:
+  it `gets source-map`, fn:
     [[{retrieveSourceMap}]] = mock_maps
 
-    expect::
-      retrieveSourceMap:: `test.fnk`
-      to_equal:: {map: `test-map`, url: null}
+    expect
+      retrieveSourceMap `test.fnk`
+      to_equal {map: `test-map`, url: null}
 
 
-  it:: `returns null for missing source-map`, fn:
+  it `returns null for missing source-map`, fn:
     [[{retrieveSourceMap}]] = mock_maps
 
-    expect::
-      retrieveSourceMap:: `test-foo.fnk`
-      to_equal:: null
+    expect
+      retrieveSourceMap `test-foo.fnk`
+      to_equal null
+
+
+
 
