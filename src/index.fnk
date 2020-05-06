@@ -40,8 +40,8 @@ transformer = fn store_map: fn source, filename:
 install_source_map_support = fn get_map:
   source_map_support.install
     dict:
-      handleUncaughtExceptions: false,
-      environment: `node`,
+      handleUncaughtExceptions: false
+      environment: `node`
       retrieveSourceMap: get_map
 
 

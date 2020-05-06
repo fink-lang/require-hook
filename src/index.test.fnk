@@ -58,8 +58,8 @@ describe `hook`, fn:
       mock_maps
       to_equal
         list: list: dict:
-          handleUncaughtExceptions: false,
-          environment: `node`,
+          handleUncaughtExceptions: false
+          environment: `node`
           retrieveSourceMap: any Function
 
 
