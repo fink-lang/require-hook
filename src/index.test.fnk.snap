@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hook gets source-map 1`] = `
+Object {
+  "map": Object {
+    "mappings": "MAAA,I,GAAO,I;QAAP,I,GAAA,I",
+    "names": Array [],
+    "sources": Array [
+      "test.fnk",
+    ],
+    "sourcesContent": Array [
+      "test = 1234",
+    ],
+    "version": 3,
+  },
+  "url": null,
+}
+`;
+
+exports[`hook transforms fnk 1`] = `
+"const test = 1234;
+exports.test = test;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInRlc3QuZm5rIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJNQUFBLEksR0FBTyxJO1FBQVAsSSxHQUFBLEkiLCJzb3VyY2VzQ29udGVudCI6WyJ0ZXN0ID0gMTIzNCJdfQ=="
+`;

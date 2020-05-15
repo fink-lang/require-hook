@@ -2,7 +2,7 @@
   "name": "@fink/require-hook",
   "version": "0.0.0",
   "engines": {
-    "node": ">=13.0.0"
+    "node": ">=14.0.0"
   },
   "private": false,
   "publishConfig": {
@@ -32,10 +32,10 @@
     }
   },
   "devDependencies": {
-    "@fink/cli": "^4.0.0",
-    "@fink/jest": "^4.0.0",
-    "@fink/larix": "^8.0.0",
-    "@fink/loxia": "^7.0.0",
+    "@fink/cli": "^5.0.0",
+    "@fink/jest": "^5.0.0",
+    "@fink/larix": "^9.0.0",
+    "@fink/loxia": "^8.0.1",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "^3.1.0",
     "jest-cli": "^26.0.0",
@@ -43,11 +43,11 @@
     "semantic-release": "^17.0.4"
   },
   "peerDependencies": {
-    "@fink/larix": ">=8.0.0",
-    "@fink/loxia": ">=7.0.0"
+    "@fink/larix": ">=9.0.0",
+    "@fink/loxia": ">=8.0.0"
   },
   "dependencies": {
-    "convert-source-map": "^1.7.0",
+    "@fink/std-lib": "^1.0.0",
     "pirates": "^4.0.1",
     "source-map-support": "^0.5.16"
   }

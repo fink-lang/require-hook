@@ -1,20 +1,14 @@
-{describe, it, mock, mock_fn, expect} = import `@fink/jest`
-{to_equal, to_throw, not, any} = import `@fink/jest`
+{describe, it, mod, mock_fn, expect} = import `@fink/jest`
+{to_equal, to_throw, any, to_match_snapshot} = import `@fink/jest`
 
 mock_hooks = []
 mock_maps = []
 
-
-jest.mock `pirates`, fn: dict:
+mod.mock `pirates`, fn: dict:
   addHook: mock_fn fn ...args: mock_hooks.push args
 
-jest.mock `source-map-support`, fn: dict:
+mod.mock `source-map-support`, fn: dict:
   install: mock_fn fn ...args: mock_maps.push args
-
-jest.mock `@fink/loxia`, fn: dict:
-  generate: mock_fn()
-
-{generate} = import `@fink/loxia`
 
 
 describe `hook`, fn:
@@ -28,20 +22,14 @@ describe `hook`, fn:
 
 
   it `transforms fnk`, fn:
-    generate.mockReturnValue {code: `test-code`, map: `test-map`}
-
     [[hook]] = mock_hooks
 
     expect
-        hook `test = 1234`, `test.fnk`
-        to_equal `
-          test-code
-          //# sourceMappingURL=data:application/json;charset=utf-8;base64,InRlc3QtbWFwIg==`
+      hook `test = 1234`, `test.fnk`
+      to_match_snapshot
 
 
   it `throws parse errors`, fn:
-    generate.mockReturnValue {code: `test-code`, map: `test-map`}
-
     [[hook]] = mock_hooks
 
     expect
@@ -51,6 +39,18 @@ describe `hook`, fn:
                 ^
 
         Expected ',' or indented new line or ']'.`
+
+
+  it `throws transform errors`, fn:
+    [[hook]] = mock_hooks
+
+    expect
+      fn: hook `123 = foo`, `test.fnk`
+      to_throw `test.fnk:1:0
+        1| 123 = foo
+           ^
+
+        Unable to transform 'assign ='.`
 
 
   it `registers source map support`, fn:
@@ -68,7 +68,7 @@ describe `hook`, fn:
 
     expect
       retrieveSourceMap `test.fnk`
-      to_equal {map: `test-map`, url: null}
+      to_match_snapshot
 
 
   it `returns null for missing source-map`, fn:
