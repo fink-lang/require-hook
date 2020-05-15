@@ -1,47 +1,50 @@
-{addHook} = import `pirates`
-source_map_support = import `source-map-support`
-convert_source_map = import `convert-source-map`
+{addHook} = import 'pirates'
+{install: sms_install} = import 'source-map-support'
 
-{parse} = import `@fink/larix`
-{generate} = import `@fink/loxia`
+{parse} = import '@fink/larix'
+{generate} = import '@fink/loxia'
+{set_props} = import '@fink/std-lib/obj'
 
 
-add_source_map_inline = fn {code, map: source_map}:
-  converter = convert_source_map.fromObject source_map
-  comment = converter.toComment()
-  '${code}\n${comment}'
+handle_error = fn obj_with_errors:
+  match obj_with_errors:
+    # TODO investigate why istanbul thinks we are not covering else
+    # istanbul ignore else
+    {errors: [{}]}:
+      {errors: [{error, stack}]} = obj_with_errors
+
+      err = new SyntaxError error
+      set_props err, {stack: '${error}${stack}'}
+      throw err
+    else:
+      obj_with_errors
+
+
+transform = fn source, filename:
+  ast = parse source, filename
+  handle_error ast
+  # TODO should loxia have it's own setting for source_map
+  opts = dict:
+    module_type: 'cjs'
+    filename
+    sourceFileName: filename
+    sourceMaps: 'both'
+
+  compiled = generate ast, filename, source, opts
+  handle_error compiled
 
 
 transformer = fn store_map: fn source, filename:
-  parse_result = parse source, filename
-
-  fink_ast = match parse_result:
-    # TODO investigate why istanbul thinks we are not covering else
-    # istanbul ignore else
-    [{}, {errors: {length: 0}}]:
-      [ast] = parse_result
-      ast
-    else:
-      [, parse_ctx] = parse_result
-      {errors: [{error, stack}]} = parse_ctx
-
-      err = new SyntaxError error
-      Object.assign err, {stack: '${error}${stack}'}
-      throw err
-
-  # {sourceRoot: path.dirname(filename)}
-  {code, map: source_map} = generate fink_ast, filename, source
-
+  {code, source_map} = transform source, filename
   store_map filename, source_map
-
-  add_source_map_inline {code, map: source_map}
+  code
 
 
 install_source_map_support = fn get_map:
-  source_map_support.install
+  sms_install
     dict:
       handleUncaughtExceptions: false
-      environment: `node`
+      environment: 'node'
       retrieveSourceMap: get_map
 
 
@@ -54,7 +57,7 @@ maps_retriever = fn source_maps: fn filename:
 
 
 maps_updater = fn source_maps: fn filename, source_map:
-  Object.assign source_maps, {(filename): source_map}
+  set_props source_maps, {(filename): source_map}
 
 
 main = fn:
@@ -63,7 +66,7 @@ main = fn:
   install_source_map_support maps_retriever source_maps
   hook = transformer maps_updater source_maps
 
-  addHook hook, {exts: [`.fnk`], ignoreNodeModules: false}
+  addHook hook, {exts: ['.fnk'], ignoreNodeModules: false}
 
 
 main()
