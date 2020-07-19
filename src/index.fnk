@@ -3,7 +3,10 @@
 
 {parse} = import '@fink/larix'
 {generate} = import '@fink/loxia'
-{set_props} = import '@fink/std-lib/obj'
+{null} = import '@fink/js-interop/nullish'
+{new, set_props} = import '@fink/js-interop/reflect'
+{SyntaxError} = import '@fink/js-interop/globals'
+
 
 
 handle_error = fn obj_with_errors:
@@ -13,7 +16,7 @@ handle_error = fn obj_with_errors:
     {errors: [{}]}:
       {errors: [{error, stack}]} = obj_with_errors
 
-      err = new SyntaxError error
+      err = new SyntaxError, error
       set_props err, {stack: '${error}${stack}'}
       throw err
     else:
@@ -23,12 +26,10 @@ handle_error = fn obj_with_errors:
 transform = fn source, filename:
   ast = parse source, filename
   handle_error ast
-  # TODO should loxia have it's own setting for source_map
+
   opts = dict:
     module_type: 'cjs'
-    filename
-    sourceFileName: filename
-    sourceMaps: 'both'
+    source_maps: 'both'
 
   compiled = generate ast, filename, source, opts
   handle_error compiled
@@ -49,10 +50,11 @@ install_source_map_support = fn get_map:
 
 
 maps_retriever = fn source_maps: fn filename:
-  source_map = source_maps.(filename) || null
+  no_sourcemap = {'no-source-map'}
+  {(filename): source_map=no_sourcemap} = source_maps
 
-  match null:
-    source_map: null
+  match source_map:
+    no_sourcemap: null
     else: {url: null, map: source_map}
 
 
@@ -69,4 +71,4 @@ main = fn:
   addHook hook, {exts: ['.fnk'], ignoreNodeModules: false}
 
 
-main()
+main _

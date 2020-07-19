@@ -1,81 +1,88 @@
-{describe, it, mod, mock_fn, expect} = import `@fink/jest`
-{to_equal, to_throw, any, to_match_snapshot} = import `@fink/jest`
+{describe, it, mock, mock_fn, expect} = import '@fink/jest'
+{to_equal, to_throw, any, to_match_snapshot} = import '@fink/jest'
+{Function} = import '@fink/js-interop/globals'
+{null} = import '@fink/js-interop/nullish'
 
+
+# TODO: don't use mutable objects
 mock_hooks = []
 mock_maps = []
 
-mod.mock `pirates`, fn: dict:
+mock 'pirates', fn: dict:
   addHook: mock_fn fn ...args: mock_hooks.push args
 
-mod.mock `source-map-support`, fn: dict:
+mock 'source-map-support', fn: dict:
   install: mock_fn fn ...args: mock_maps.push args
 
 
-describe `hook`, fn:
-  require `.`
+describe 'hook', fn:
+  require '.'
 
-  it `registers hook`, fn:
+  it 'registers hook', fn:
     expect
       mock_hooks
       to_equal
-        [[any(Function), {exts: [`.fnk`], ignoreNodeModules: false}]]
+        [[
+          any Function
+          {exts: ['.fnk'], ignoreNodeModules: false}
+        ]]
 
 
-  it `transforms fnk`, fn:
+  it 'transforms fnk', fn:
     [[hook]] = mock_hooks
 
     expect
-      hook `test = 1234`, `test.fnk`
+      hook 'test = 1234', 'test.fnk'
       to_match_snapshot
 
 
-  it `throws parse errors`, fn:
+  it 'throws parse errors', fn:
     [[hook]] = mock_hooks
 
     expect
-      fn: hook `foo [`, `test.fnk`
-      to_throw `test.fnk:1:5
+      fn: hook 'foo [', 'test.fnk'
+      to_throw "test.fnk:1:5
         1| foo [
                 ^
 
-        Expected ',' or indented new line or ']'.`
+        Expected ',' or indented(>=1) new line or ']'"
 
 
-  it `throws transform errors`, fn:
+  it 'throws transform errors', fn:
     [[hook]] = mock_hooks
 
     expect
-      fn: hook `123 = foo`, `test.fnk`
-      to_throw `test.fnk:1:0
+      fn: hook '123 = foo', 'test.fnk'
+      to_throw "test.fnk:1:0
         1| 123 = foo
            ^
 
-        Unable to transform 'assign ='.`
+        Unable to transform 'assign ='."
 
 
-  it `registers source map support`, fn:
+  it 'registers source map support', fn:
     expect
       mock_maps
       to_equal
         list: list: dict:
           handleUncaughtExceptions: false
-          environment: `node`
+          environment: 'node'
           retrieveSourceMap: any Function
 
 
-  it `gets source-map`, fn:
+  it 'gets source-map', fn:
     [[{retrieveSourceMap}]] = mock_maps
 
     expect
-      retrieveSourceMap `test.fnk`
+      retrieveSourceMap 'test.fnk'
       to_match_snapshot
 
 
-  it `returns null for missing source-map`, fn:
+  it 'returns null for missing source-map', fn:
     [[{retrieveSourceMap}]] = mock_maps
 
     expect
-      retrieveSourceMap `test-foo.fnk`
+      retrieveSourceMap 'test-foo.fnk'
       to_equal null
 
 
