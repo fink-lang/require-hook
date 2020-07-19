@@ -13,7 +13,7 @@ module.exports = {
 
   snapshotResolver: '@fink/jest/snapshot-resolver',
 
-  timers: 'fake',
+  timers: 'modern',
 
   clearMocks: true,
   resetMocks: false,
