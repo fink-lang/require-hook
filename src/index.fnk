@@ -1,11 +1,11 @@
 {addHook} = import 'pirates'
 {install: sms_install} = import 'source-map-support'
 
-{parse} = import '@fink/larix'
-{generate} = import '@fink/loxia'
-{null} = import '@fink/js-interop/nullish'
-{new, set_props} = import '@fink/js-interop/reflect'
-{SyntaxError} = import '@fink/js-interop/globals'
+{parse} = import '@fink/larix/parser.fnk'
+{generate} = import '@fink/loxia/generate.fnk'
+{null} = import '@fink/js-interop/nullish.fnk'
+{new, set_props} = import '@fink/js-interop/reflect.fnk'
+{SyntaxError} = import '@fink/js-interop/globals.fnk'
 
 
 
