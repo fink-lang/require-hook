@@ -1,7 +1,8 @@
-{describe, it, mock, mock_fn, expect} = import '@fink/jest'
-{to_equal, to_throw, any, to_match_snapshot} = import '@fink/jest'
-{Function} = import '@fink/js-interop/globals'
-{null} = import '@fink/js-interop/nullish'
+{describe, it, mock, mock_fn, expect} = import '@fink/jest/test.fnk'
+{to_equal, to_throw, any, to_match_snapshot} = import '@fink/jest/test.fnk'
+{Function} = import '@fink/js-interop/globals.fnk'
+{null} = import '@fink/js-interop/nullish.fnk'
+
 
 
 # TODO: don't use mutable objects
@@ -16,7 +17,7 @@ mock 'source-map-support', fn: dict:
 
 
 describe 'hook', fn:
-  require '.'
+  require './index.fnk'
 
   it 'registers hook', fn:
     expect
