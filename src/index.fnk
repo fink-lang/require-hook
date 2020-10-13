@@ -30,6 +30,7 @@ transform = fn source, filename:
   opts = dict:
     module_type: 'cjs'
     source_maps: 'both'
+    import: {ext: {abs: '.js', rel: '.fnk'}}
 
   compiled = generate ast, filename, source, opts
   handle_error compiled
