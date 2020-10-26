@@ -2,7 +2,8 @@
 {to_equal, to_throw, any, to_match_snapshot} = import '@fink/jest/test.fnk'
 {Function} = import '@fink/js-interop/globals.fnk'
 {null} = import '@fink/js-interop/nullish.fnk'
-
+{createRequire} = import 'module'
+{resolve} = import 'path'
 
 
 # TODO: don't use mutable objects
@@ -16,8 +17,11 @@ mock 'source-map-support', fn: dict:
   install: mock_fn fn ...args: mock_maps.push args
 
 
+require_mod = createRequire resolve './src/index.test.fnk'
+
+
 describe 'hook', fn:
-  require './index.fnk'
+  require_mod './index.fnk'
 
   it 'registers hook', fn:
     expect
