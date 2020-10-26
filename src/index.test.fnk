@@ -46,7 +46,7 @@ describe 'hook', fn:
         1| foo [
                 ^
 
-        Expected ',' or indented(>=1) new line or ']'"
+        Expected `,` or indented(>=1) new line or `]`"
 
 
   it 'throws transform errors', fn:
@@ -54,11 +54,14 @@ describe 'hook', fn:
 
     expect
       fn: hook '123 = foo', 'test.fnk'
-      to_throw "test.fnk:1:0
+      to_throw 'test.fnk:1:0
         1| 123 = foo
            ^
 
-        Unable to transform 'assign ='."
+        Unable to transform `assign =`.
+
+        TypeError: Property left of AssignmentExpression expected node to be of a type ["LVal"] but instead got "NumericLiteral"
+        '
 
 
   it 'registers source map support', fn:

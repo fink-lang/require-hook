@@ -4,23 +4,24 @@
 {parse} = import '@fink/larix/parser.fnk'
 {generate} = import '@fink/loxia/generate.fnk'
 {null} = import '@fink/js-interop/nullish.fnk'
-{new, set_props} = import '@fink/js-interop/reflect.fnk'
-{SyntaxError} = import '@fink/js-interop/globals.fnk'
+{set_props} = import '@fink/js-interop/reflect.fnk'
+{error, is_error} = import '@fink/std-lib/error.fnk'
 
 
 
 handle_error = fn obj_with_errors:
   match obj_with_errors:
-    # TODO investigate why istanbul thinks we are not covering else
-    # istanbul ignore else
     {errors: [{}]}:
-      {errors: [{error, stack}]} = obj_with_errors
+      {errors: [err]} = obj_with_errors
+      match err:
+        is_error ?:
+          throw err
+        else:
+          throw error err.error, {stack: '${error.stack}'}
 
-      err = new SyntaxError, error
-      set_props err, {stack: '${error}${stack}'}
-      throw err
     else:
       obj_with_errors
+
 
 
 transform = fn source, filename:
@@ -36,10 +37,12 @@ transform = fn source, filename:
   handle_error compiled
 
 
+
 transformer = fn store_map: fn source, filename:
   {code, source_map} = transform source, filename
   store_map filename, source_map
   code
+
 
 
 install_source_map_support = fn get_map:
@@ -48,6 +51,7 @@ install_source_map_support = fn get_map:
       handleUncaughtExceptions: false
       environment: 'node'
       retrieveSourceMap: get_map
+
 
 
 maps_retriever = fn source_maps: fn filename:
