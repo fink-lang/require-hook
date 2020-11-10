@@ -28,7 +28,7 @@ transform = fn source, filename:
   ast = parse source, filename
   handle_error ast
 
-  opts = dict:
+  opts = rec:
     module_type: 'cjs'
     source_maps: 'both'
     import: {ext: {abs: '.js', rel: '.fnk'}}
@@ -47,7 +47,7 @@ transformer = fn store_map: fn source, filename:
 
 install_source_map_support = fn get_map:
   sms_install
-    dict:
+    rec:
       handleUncaughtExceptions: false
       environment: 'node'
       retrieveSourceMap: get_map

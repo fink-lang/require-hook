@@ -10,10 +10,10 @@
 mock_hooks = []
 mock_maps = []
 
-mock 'pirates', fn: dict:
+mock 'pirates', fn: rec:
   addHook: mock_fn fn ...args: mock_hooks.push args
 
-mock 'source-map-support', fn: dict:
+mock 'source-map-support', fn: rec:
   install: mock_fn fn ...args: mock_maps.push args
 
 
@@ -72,7 +72,7 @@ describe 'hook', fn:
     expect
       mock_maps
       to_equal
-        list: list: dict:
+        seq: seq: rec:
           handleUncaughtExceptions: false
           environment: 'node'
           retrieveSourceMap: any Function
