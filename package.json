@@ -4,6 +4,11 @@
   "engines": {
     "node": ">=14.0.0"
   },
+  "keywords": [
+    "require-hook",
+    "fink",
+    "fink-lang"
+  ],
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -32,10 +37,10 @@
     }
   },
   "devDependencies": {
-    "@fink/cli": "^8.0.0",
-    "@fink/jest": "^7.0.0",
-    "@fink/larix": "^13.1.0",
-    "@fink/loxia": "^14.0.2",
+    "@fink/cli": "^8.2.0",
+    "@fink/jest": "^7.2.0",
+    "@fink/larix": "^15.3.1",
+    "@fink/loxia": "^19.1.2",
     "commitizen": "^4.2.1",
     "cz-conventional-changelog": "^3.3.0",
     "jest-cli": "^26.5.2",
@@ -47,8 +52,8 @@
     "@fink/loxia": ">=14.0.0"
   },
   "dependencies": {
-    "@fink/js-interop": "^2.0.0",
-    "@fink/std-lib": "^6.0.0",
+    "@fink/js-interop": "^2.3.1",
+    "@fink/std-lib": "^7.0.1",
     "pirates": "^4.0.1",
     "source-map-support": "^0.5.16"
   }
