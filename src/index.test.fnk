@@ -72,7 +72,7 @@ describe 'hook', fn:
     expect
       mock_maps
       to_equal
-        seq: seq: rec:
+        list: list: rec:
           handleUncaughtExceptions: false
           environment: 'node'
           retrieveSourceMap: any Function
