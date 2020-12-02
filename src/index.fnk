@@ -3,6 +3,9 @@
 
 {parse} = import '@fink/larix/parser.fnk'
 {generate} = import '@fink/loxia/generate.fnk'
+
+{is_empty} = import '@fink/std-lib/iter.fnk'
+
 {null} = import '@fink/js-interop/nullish.fnk'
 {set_props} = import '@fink/js-interop/reflect.fnk'
 {error, is_error} = import '@fink/std-lib/error.fnk'
@@ -11,16 +14,15 @@
 
 handle_error = fn obj_with_errors:
   match obj_with_errors:
-    {errors: [{}]}:
+    {errors: is_empty ?}:
+      obj_with_errors
+    else:
       {errors: [err]} = obj_with_errors
       match err:
         is_error ?:
           throw err
         else:
           throw error err.error, {stack: '${error.stack}'}
-
-    else:
-      obj_with_errors
 
 
 
@@ -31,7 +33,7 @@ transform = fn source, filename:
   opts = rec:
     module_type: 'cjs'
     source_maps: 'both'
-    import: {ext: {abs: '.js', rel: '.fnk'}}
+    import.ext: {abs: '.js', rel: '.fnk'}
 
   compiled = generate ast, filename, source, opts
   handle_error compiled
