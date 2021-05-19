@@ -7,7 +7,7 @@ module.exports = {
   transformIgnorePatterns: ['.+/node_modules/', '<rootDir>/build/'],
 
   resolver: '@fink/jest/cjs/module-resolver.js',
-  snapshotResolver: '@fink/jest/snapshot-resolver',
+  snapshotResolver: '@fink/jest/snapshot-resolver.js',
 
   modulePathIgnorePatterns: ['<rootDir>/build/'],
 
