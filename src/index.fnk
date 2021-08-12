@@ -7,8 +7,9 @@
 {is_empty} = import '@fink/std-lib/iter.fnk'
 
 {null} = import '@fink/js-interop/nullish.fnk'
-{set_props} = import '@fink/js-interop/reflect.fnk'
-{error, is_error} = import '@fink/std-lib/error.fnk'
+{set_props, is_instance} = import '@fink/js-interop/reflect.fnk'
+{throw_err, error} = import '@fink/js-interop/errors.fnk'
+{Error} = import '@fink/js-interop/globals.fnk'
 
 
 
@@ -19,10 +20,10 @@ handle_error = fn obj_with_errors:
     else:
       {errors: [err]} = obj_with_errors
       match err:
-        is_error ?:
-          throw err
+        is_instance ?, Error:
+          throw_err err
         else:
-          throw error err.error, {stack: '${error.stack}'}
+          throw_err error err.error, {stack: '${error.stack}'}
 
 
 

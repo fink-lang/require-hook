@@ -39,8 +39,8 @@
   "devDependencies": {
     "@fink/cli": "^8.3.0",
     "@fink/jest": "^7.2.0",
-    "@fink/larix": "^18.1.0",
-    "@fink/loxia": "^21.2.0",
+    "@fink/larix": "^20.0.0",
+    "@fink/loxia": "^23.0.0",
     "commitizen": "^4.2.1",
     "cz-conventional-changelog": "^3.3.0",
     "jest-cli": "^27.0.0",
@@ -52,8 +52,8 @@
     "@fink/loxia": ">=14.0.0"
   },
   "dependencies": {
-    "@fink/js-interop": "^2.3.1",
-    "@fink/std-lib": "^8.0.1",
+    "@fink/js-interop": "^3.0.0",
+    "@fink/std-lib": "^8.5.0",
     "pirates": "^4.0.1",
     "source-map-support": "^0.5.16"
   }
