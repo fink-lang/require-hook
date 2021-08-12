@@ -68,7 +68,7 @@ describe 'hook', fn:
         '
 
 
-  it 'registers source map support', fn:
+  it 'registers sourcemap support', fn:
     expect
       mock_maps
       to_equal
